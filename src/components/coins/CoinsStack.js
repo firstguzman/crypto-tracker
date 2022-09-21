@@ -2,8 +2,8 @@ import {View, Text} from "react-native"
 import React from "react"
 import {createStackNavigator} from "@react-navigation/stack"
 import CoinsScreen from "./CoinsScreen"
-import CoinDetailScreen from "./CoinDetailScreen"
 import {COLORS} from "../../utils/constants"
+import CoinDetailScreen from "../coinDetail/CoinDetailScreen"
 
 const Stack = createStackNavigator()
 
