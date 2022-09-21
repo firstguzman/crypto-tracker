@@ -1,8 +1,18 @@
-import {View, Text, StyleSheet, Image, Platform} from "react-native"
+import {
+  View,
+  Text,
+  StyleSheet,
+  Image,
+  Platform,
+  TouchableWithoutFeedback
+} from "react-native"
 import React from "react"
 import {COLORS} from "../../utils/constants"
+import {useNavigation} from "@react-navigation/native"
 
 const CoinItem = ({item}) => {
+  const navigation = useNavigation()
+
   const getImgArrow = () => {
     if (item.percent_change_1h > 0) {
       return require("../../assets/arrow_up.png")
@@ -11,19 +21,25 @@ const CoinItem = ({item}) => {
     }
   }
 
-  return (
-    <View style={styles.container}>
-      <View style={styles.row}>
-        <Text style={styles.symbolText}>{item.symbol}</Text>
-        <Text style={styles.nameText}>{item.name}</Text>
-        <Text style={styles.priceText}>{`$${item.price_usd}`}</Text>
-      </View>
+  const goToDetail = () => {
+    navigation.navigate("CoinDetail", {coin: item})
+  }
 
-      <View style={styles.row}>
-        <Text style={styles.percent}>{item.percent_change_1h}</Text>
-        <Image style={styles.imgIcon} source={getImgArrow()} />
+  return (
+    <TouchableWithoutFeedback onPress={goToDetail}>
+      <View style={styles.container}>
+        <View style={styles.row}>
+          <Text style={styles.symbolText}>{item.symbol}</Text>
+          <Text style={styles.nameText}>{item.name}</Text>
+          <Text style={styles.priceText}>{`$${item.price_usd}`}</Text>
+        </View>
+
+        <View style={styles.row}>
+          <Text style={styles.percent}>{item.percent_change_1h}</Text>
+          <Image style={styles.imgIcon} source={getImgArrow()} />
+        </View>
       </View>
-    </View>
+    </TouchableWithoutFeedback>
   )
 }
 

@@ -1,14 +1,12 @@
-import {View, Text, Button, ActivityIndicator, StyleSheet} from "react-native"
+import {View, ActivityIndicator, StyleSheet} from "react-native"
 import React, {useEffect, useState} from "react"
-import {useNavigation} from "@react-navigation/native"
 import {API_HOST, COLORS} from "../../utils/constants"
 import {get} from "../../libs/http"
 import CoinsList from "./CoinsList"
 
-const CoinsScreen = props => {
+const CoinsScreen = () => {
   const [coins, setCoins] = useState([])
   const [loading, setLoading] = useState(false)
-  const navigation = useNavigation()
 
   useEffect(() => {
     ;(async () => {
@@ -31,17 +29,13 @@ const CoinsScreen = props => {
     }
   }
 
-  const handlePress = () => {
-    console.log("Go to details", props)
-    navigation.navigate("CoinDetail")
+  if (loading) {
+    return <ActivityIndicator color="#FFF" size="large" />
   }
 
   return (
     <View style={styles.container}>
-      {loading ? <ActivityIndicator color="#FFF" size="large" /> : null}
-      <Text>CoinsScreen</Text>
       <CoinsList coins={coins} />
-      <Button title="Go to detail" onPress={handlePress} />
     </View>
   )
 }
