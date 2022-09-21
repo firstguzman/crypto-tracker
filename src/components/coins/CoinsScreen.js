@@ -3,9 +3,11 @@ import React, {useEffect, useState} from "react"
 import {API_HOST, COLORS} from "../../utils/constants"
 import {get} from "../../libs/http"
 import CoinsList from "./CoinsList"
+import CoinSearch from "./CoinSearch"
 
 const CoinsScreen = () => {
   const [coins, setCoins] = useState([])
+  const [allCoins, setAllCoins] = useState([])
   const [loading, setLoading] = useState(false)
 
   useEffect(() => {
@@ -22,11 +24,23 @@ const CoinsScreen = () => {
       const coinsArray = response.data
 
       setCoins([...coins, ...coinsArray])
+      setAllCoins(coins)
     } catch (error) {
       console.error(error)
     } finally {
       setLoading(false)
     }
+  }
+
+  const handleSearch = query => {
+    const coinsFiltered = allCoins.filter(coin => {
+      return (
+        coin.name.toLowerCase().includes(query.toLowerCase()) ||
+        coin.symbol.toLowerCase().includes(query.toLowerCase())
+      )
+    })
+
+    setCoins(coinsFiltered)
   }
 
   if (loading) {
@@ -35,6 +49,7 @@ const CoinsScreen = () => {
 
   return (
     <View style={styles.container}>
+      <CoinSearch onChange={handleSearch} />
       <CoinsList coins={coins} />
     </View>
   )
