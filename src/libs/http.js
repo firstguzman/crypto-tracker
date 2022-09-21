@@ -1,6 +1,5 @@
 export async function get(url) {
   try {
-    console.log(url)
     const response = await fetch(url)
     const result = await response.json()
     return result

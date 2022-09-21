@@ -1,7 +1,7 @@
 import {View, Text, Button, ActivityIndicator, StyleSheet} from "react-native"
 import React, {useEffect, useState} from "react"
 import {useNavigation} from "@react-navigation/native"
-import {API_HOST} from "../../utils/constants"
+import {API_HOST, COLORS} from "../../utils/constants"
 import {get} from "../../libs/http"
 import CoinsList from "./CoinsList"
 
@@ -49,7 +49,7 @@ const CoinsScreen = props => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#FFF"
+    backgroundColor: COLORS.charade
   }
 })
 
