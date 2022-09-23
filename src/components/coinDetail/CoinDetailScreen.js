@@ -5,7 +5,8 @@ import {
   StyleSheet,
   SectionList,
   FlatList,
-  Pressable
+  Pressable,
+  Alert
 } from "react-native"
 import React, {useEffect, useState} from "react"
 import {API_HOST, COLORS, IMG_URL} from "../../utils/constants"
@@ -29,10 +30,10 @@ const CoinDetailScreen = ({navigation, route}) => {
   useEffect(() => {
     setCoin(params.coin)
     loadMarkets(params.coin.id)
+    getFavorite(params.coin.id)
   }, [params])
 
   const getSymbolIcon = symbol => {
-    console.log(symbol)
     if (symbol) {
       return `${IMG_URL}${symbol}.png`
     }
@@ -76,7 +77,40 @@ const CoinDetailScreen = ({navigation, route}) => {
     }
   }
 
-  const removeFavorite = () => {}
+  const removeFavorite = () => {
+    Alert.alert("Remove favorite", "Are you sure?", [
+      {
+        text: "Cancel",
+        onPress: () => {},
+        style: "cancel"
+      },
+      {
+        text: "Remove",
+        onPress: () => {
+          const key = `favorite-${coin.id}`
+          const removed = Storage.instance.remove(key)
+          if (removed) {
+            setIsFavorite(false)
+          }
+        },
+        style: "destructive"
+      }
+    ])
+  }
+
+  const getFavorite = async id => {
+    try {
+      const key = `favorite-${id}`
+
+      const favStr = await Storage.instance.get(key)
+
+      if (favStr != null) {
+        setIsFavorite(true)
+      }
+    } catch (error) {
+      console.error(error)
+    }
+  }
 
   const toggleFavorite = () => {
     if (isFavorite) {
