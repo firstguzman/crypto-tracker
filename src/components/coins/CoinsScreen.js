@@ -7,7 +7,7 @@ import CoinSearch from "./CoinSearch"
 
 const CoinsScreen = () => {
   const [coins, setCoins] = useState([])
-  const [allCoins, setAllCoins] = useState([])
+  const [filteredCoins, setFilteredCoins] = useState([])
   const [loading, setLoading] = useState(false)
 
   useEffect(() => {
@@ -21,10 +21,8 @@ const CoinsScreen = () => {
       setLoading(true)
       const response = await get(`${API_HOST}tickers/`)
 
-      const coinsArray = response.data
-
-      setCoins([...coins, ...coinsArray])
-      setAllCoins(coins)
+      setCoins(response.data)
+      setFilteredCoins(response.data)
     } catch (error) {
       console.error(error)
     } finally {
@@ -33,14 +31,13 @@ const CoinsScreen = () => {
   }
 
   const handleSearch = query => {
-    const coinsFiltered = allCoins.filter(coin => {
-      return (
+    const filter = coins.filter(
+      coin =>
         coin.name.toLowerCase().includes(query.toLowerCase()) ||
         coin.symbol.toLowerCase().includes(query.toLowerCase())
-      )
-    })
+    )
 
-    setCoins(coinsFiltered)
+    setFilteredCoins(filter)
   }
 
   if (loading) {
@@ -50,7 +47,7 @@ const CoinsScreen = () => {
   return (
     <View style={styles.container}>
       <CoinSearch onChange={handleSearch} />
-      <CoinsList coins={coins} />
+      <CoinsList coins={filteredCoins} />
     </View>
   )
 }
